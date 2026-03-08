@@ -1,0 +1,13 @@
+app/simulator.tsx(73,35): error TS2353: Object literal may only specify known properties, and 'color' does not exist in type '{ backfaceVisibility?: "visible" | "hidden" | SequenceItem<"visible" | "hidden" | undefined>[] | { value: "visible" | "hidden" | undefined; onDidAnimate: InlineOnDidAnimate<"visible" | "hidden" | SequenceItem<...>[] | undefined>; } | undefined; ... 84 more ...; transform?: Partial<...>[] | ... 1 more ... | undefined...'.
+app/simulator.tsx(74,36): error TS2353: Object literal may only specify known properties, and 'color' does not exist in type 'OrDerivedValue<{ backfaceVisibility?: "visible" | "hidden" | SequenceItem<"visible" | "hidden" | undefined>[] | { value: "visible" | "hidden" | undefined; onDidAnimate: InlineOnDidAnimate<"visible" | "hidden" | SequenceItem<...>[] | undefined>; } | undefined; ... 84 more ...; transform?: Partial<...>[] | ... 1 more ...'.
+index.ts(3,17): error TS1261: Already included file name 'C:/Users/RDP/Downloads/Expense-Master1-main/Expense-Master1-main/frontend_expo/App/index.tsx' differs from file name 'C:/Users/RDP/Downloads/Expense-Master1-main/Expense-Master1-main/frontend_expo/app/index.tsx' only in casing.
+  The file is in the program because:
+    Imported via './App' from file 'C:/Users/RDP/Downloads/Expense-Master1-main/Expense-Master1-main/frontend_expo/index.ts'
+    Matched by include pattern '**/*.tsx' in 'C:/Users/RDP/Downloads/Expense-Master1-main/Expense-Master1-main/frontend_expo/tsconfig.json'
+src/components/AuraBackground.tsx(62,11): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: LinearGradientProps): LinearGradient', gave the following error.
+    Type 'string[]' is not assignable to type 'readonly [ColorValue, ColorValue, ...ColorValue[]]'.
+      Source provides no match for required element at position 0 in target.
+  Overload 2 of 2, '(props: LinearGradientProps, context: any): LinearGradient', gave the following error.
+    Type 'string[]' is not assignable to type 'readonly [ColorValue, ColorValue, ...ColorValue[]]'.
+      Source provides no match for required element at position 0 in target.
