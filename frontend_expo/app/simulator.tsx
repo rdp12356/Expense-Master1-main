@@ -8,6 +8,10 @@ import { useSettingsStore } from '../src/store/useSettingsStore';
 import { CURRENCIES } from '../src/utils/constants';
 import { AuraBackground } from '../src/components/AuraBackground';
 
+import { Share, ActivityIndicator } from 'react-native';
+import { Share2 } from 'lucide-react-native';
+import { api } from '../services/api';
+
 export default function Simulator() {
   const router = useRouter();
   const { theme, currency } = useSettingsStore(s => s.settings);
@@ -15,6 +19,7 @@ export default function Simulator() {
   const symbol = CURRENCIES.find(c => c.code === currency)?.symbol || '$';
   
   const [dailyHabit, setDailyHabit] = useState('5');
+  const [isSharing, setIsSharing] = useState(false);
   const amount = parseFloat(dailyHabit) || 0;
   
   // FV = P * (((1 + r)^n - 1) / r)
@@ -22,6 +27,29 @@ export default function Simulator() {
   const rate = 0.07; // 7% market return
   const years = 10;
   const futureValue = annualContrib * (((Math.pow(1 + rate, years) - 1)) / rate);
+
+  const handleShare = async () => {
+    setIsSharing(true);
+    try {
+      const res = await api.saveSimulation({
+        habitName: "Daily Habit",
+        dailyCost: amount,
+        projectedWealth: futureValue,
+        years: years
+      });
+      const shareUrl = `https://expensemaster.global/s/${res.data.id}`;
+      
+      await Share.share({
+        message: `I just simulated my financial future! My $${amount}/day habit is costing me $${futureValue.toLocaleString()} over 10 years. Realize your own potential here: ${shareUrl}`,
+        url: shareUrl,
+        title: 'ExpenseMaster Wealth Simulation'
+      });
+    } catch (error) {
+      console.error('Sharing failed:', error);
+    } finally {
+      setIsSharing(false);
+    }
+  };
   
   return (
     <AuraBackground>
@@ -82,6 +110,21 @@ export default function Simulator() {
             <Text className={`text-center mt-2 ${isDark ? 'text-textSecondary' : 'text-gray-500'}`}>
               Assuming this money was invested at a 7% average annual return instead of spent. Small changes ripple into massive wealth!
             </Text>
+
+            <TouchableOpacity 
+              onPress={handleShare}
+              disabled={isSharing}
+              className={`mt-8 flex-row items-center justify-center px-8 py-4 rounded-2xl ${isDark ? 'bg-primary' : 'bg-primary'} w-full`}
+            >
+              {isSharing ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <>
+                  <Share2 color="white" size={20} className="mr-2" />
+                  <Text className="text-white font-bold text-lg">Share Projections</Text>
+                </>
+              )}
+            </TouchableOpacity>
           </MotiView>
         </ScrollView>
       </SafeAreaView>

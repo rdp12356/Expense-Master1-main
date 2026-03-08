@@ -11,11 +11,27 @@ import { AuraBackground } from '../src/components/AuraBackground';
 import { CURRENCIES } from '../src/utils/constants';
 import { TrendingUp, Activity, MessageCircle } from 'lucide-react-native';
 
+import { api } from '../src/services/api';
+import { Globe } from 'lucide-react-native';
+
 export default function Dashboard() {
   const router = useRouter();
   const { transactions } = useTransactionStore();
   const { theme, currency, ghostRacingEnabled } = useSettingsStore((state) => state.settings);
   const isDark = theme === 'dark' || theme === 'system';
+  const [benchmarks, setBenchmarks] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    const fetchBenchmarks = async () => {
+      try {
+        const res = await api.getBenchmarks();
+        setBenchmarks(res.data);
+      } catch (err) {
+        console.warn('Failed to load benchmarks');
+      }
+    };
+    fetchBenchmarks();
+  }, []);
 
   const currencySymbol = useMemo(() => {
     return CURRENCIES.find(c => c.code === currency)?.symbol || '$';
@@ -155,6 +171,33 @@ export default function Dashboard() {
               </Text>
             </MotiView>
           </View>
+
+          {/* Global Perspective (Benchmarks) */}
+          {benchmarks.length > 0 && (
+            <MotiView
+              from={{ opacity: 0, translateY: 20 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              className={`p-6 rounded-3xl mb-6 ${isDark ? 'bg-card/50' : 'bg-white/50'} border border-primary/20`}
+            >
+              <View className="flex-row items-center mb-4">
+                <Globe color="#3b82f6" size={20} className="mr-2" />
+                <Text className={`font-bold ${isDark ? 'text-textPrimary' : 'text-gray-900'}`}>Global Perspective</Text>
+              </View>
+              <Text className={`text-xs mb-4 ${isDark ? 'text-textSecondary' : 'text-gray-500'}`}>
+                How your emotional ROI compare to the ExpenseMaster community:
+              </Text>
+              {benchmarks.slice(0, 3).map((stat, i) => (
+                <View key={stat.emotion} className="flex-row justify-between items-center mb-2">
+                  <Text className={`${isDark ? 'text-textSecondary' : 'text-gray-600'} capitalize`}>{stat.emotion}</Text>
+                  <View className="flex-row items-center">
+                    <Text className={`font-bold ${isDark ? 'text-textPrimary' : 'text-gray-900'}`}>
+                      {currencySymbol}{Math.round(stat.avgAmount).toLocaleString()} avg
+                    </Text>
+                  </View>
+                </View>
+              ))}
+            </MotiView>
+          )}
 
           {/* Butterfly Simulator Link */}
           <MotiView

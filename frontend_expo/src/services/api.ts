@@ -27,6 +27,8 @@ export const api = {
   sync: () => apiClient.get('/sync'),
   saveTransaction: (transaction: any) => apiClient.post('/transactions', transaction),
   updateSettings: (settings: any) => apiClient.patch('/settings', settings),
+  saveSimulation: (simulation: any) => apiClient.post('/simulations', simulation),
+  getBenchmarks: () => apiClient.get('/benchmarks'),
 };
 
 export default apiClient;
