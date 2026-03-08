@@ -10,7 +10,7 @@ import { AuraBackground } from '../src/components/AuraBackground';
 
 import { Share, ActivityIndicator } from 'react-native';
 import { Share2 } from 'lucide-react-native';
-import { api } from '../services/api';
+import { api } from '../src/services/api';
 
 export default function Simulator() {
   const router = useRouter();
